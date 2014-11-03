@@ -7,7 +7,6 @@ __module_description__ = "Flashing bar/mass highlight script."
 
 import xchat, random
 xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
-help_str = "/fb [1,2,3,4 [$n is replaced with the user nick], 5]"
 my_nick = xchat.get_info('nick')
 
 def fb(word, word_eol, userdata):
@@ -65,7 +64,7 @@ def fb(word, word_eol, userdata):
                     new_msg = "%s %s> %s" % (nick, "-"*(space-1), message)
                     xchat.command("say %s" % new_msg)
     return xchat.EAT_ALL
-xchat.hook_command("fb", fb, help=help_str)
+xchat.hook_command("fb", fb, help="/fb [1,2 [$n is replaced with the user nick], 3, 4, 5]")
 
 def color():
     color_range = range(2, 16)
