@@ -158,7 +158,7 @@ def scroll(word, word_eol, userdata):
         if data.split()[0] == '-speed':
             speed = int(data.split()[1])*10
         if data[0] != '-':
-            print ">>Improper argument ('/scroll ascii -arg1 -arg2')"
+            xchat.prnt(">>Improper argument ('/scroll ascii [-arg1 ...]')")
             return
         _args = [arg for arg in data[1:].split(' -') if arg.split()[0] in funcs.keys()]
         for arg in _args:
