@@ -7,6 +7,7 @@ __module_description__ = "IRC ascii art scroller/transformer"
 
 import xchat, random, re, os
 xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
+my_nick = xchat.get_info('nick')
 running = True
 
 def invert(text):
