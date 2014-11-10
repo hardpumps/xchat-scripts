@@ -10,13 +10,17 @@ xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 SAFE_CHANS = []
 
 def unfuck(word, word_eol, userdata):
-    _chan = word[1]
-    if _chan not in SAFE_CHANS:
-        network = xchat.get_info('network')
-        chan = [ch for ch in xchat.get_list('channels') if
-            ch.channel == _chan][0]
-        if chan.network == network and chan.type == 2:
-            chan.context.command('timer 3 close') 
+    try:
+        _chan = word[1]
+    except IndexError:
+        xchat.prnt("[!] unfuck.py Error: Missing chan argument!")
+    else:
+        if _chan not in SAFE_CHANS:
+            network = xchat.get_info('network')
+            chan = [ch for ch in xchat.get_list('channels') if
+                ch.channel == _chan][0]
+            if chan.network == network and chan.type == 2:
+                chan.context.command('timer 3 close') 
 xchat.hook_print('You Join', unfuck)
 
 def add_safe_chan(word, word_eol, userdata):
