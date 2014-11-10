@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*
 
-
-
 __module_name__ = "mimic.py"
 __module_version__ = "1.0"
 __module_description__ = "Mimic another chatter on irc."
@@ -52,10 +50,7 @@ def on_target_message(word, word_eol, userdata):
             host = [user.host for user in ctx.get_list("users") 
                     if xchat.nickcmp(user.nick, nick) != 0]
             if host:
-                print host
-                print host[0]
                 if host[0] == TARGET_HOST:
-                    print "MATCH"
                     message = word[1]
                     ctx.command("say %s" % message)
         else:
