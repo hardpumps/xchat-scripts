@@ -63,7 +63,7 @@ def fb(word, word_eol, userdata):
                     space = 65 - (len(message) + len(nick))
                     new_msg = "%s %s> %s" % (nick, "-"*(space-1), message)
                     xchat.command("say %s" % new_msg)
-    return xchat.EAT_NONE
+    return xchat.EAT_ALL
 xchat.hook_command("fb", fb, help="/fb [1,2 [$n is replaced with the user nick], 3, 4, 5]")
 
 def color():

@@ -36,14 +36,15 @@ def timeline(word, word_eol, userdata):
     except IndexError:
         xchat.prnt("[!] twitter.py Error: Invalid arguments!")
     else:
-        tweets = [t.text.encode('utf-8') 
-                    for t in api.user_timeline(user, count=count)]
-        if tweets:
-            ctx = twitter_context()
-            for t in tweets:
-                ctx.prnt(t)
-        else:
-            ctx.prnt('[!] twitter.py Error: No tweets found!')
+        ctx = twitter_context()
+        for t in api.user_timeline(user, count=count):
+            tid = t.id_str
+            txt = t.text.encode('utf-8').split()
+            txt = ' '.join(['11%s' % t if '@' in t 
+                                else '2%s' % t if 'http' in t 
+                                    else t 
+                                        for t in txt])
+            ctx.prnt('[11@%s] %s - 15https://twitter.com/%s/status/%s' % (user, txt, user, tid))
     return xchat.EAT_ALL
 xchat.hook_command("timeline", timeline, help="/timline [user_name] [count]")
 
@@ -61,4 +62,5 @@ def tweet(word, word_eol, userdata):
                 status = next(tweepy.Cursor(api.user_timeline).items(), None)
                 url = 'https://twitter.com/ermff/status/'+status.id_str
                 xchat.command('say I just tweeted: '+tweet_msg+' '+url)
+    return xchat.EAT_ALL
 xchat.hook_command("tweet", tweet, help="/tweet [msg]")
