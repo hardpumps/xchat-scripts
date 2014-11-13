@@ -141,7 +141,7 @@ funcs = {
 def scroll(word, word_eol, userdata):
     global running
     running = True
-    path = 'F:\\backup\\ascii\\'
+    path = '/home/erm/Documents/irc/irc/ascii/'
     if len(word) > 2:
         data = word_eol[2]
         if data[1:].split()[0] == 'search':

@@ -29,8 +29,6 @@ def matixgen(word, word_eol, userdata):
         border_char = 'h'
         text = []
         placeholder = ''
-     
-        color_range = [str(i) for i in range(2,16)]
         border_one = ''+border_char+''
         border_two = border_char+''
         for x in range(16):
