@@ -52,8 +52,6 @@ def timeline(word, word_eol, userdata):
     return xchat.EAT_ALL
 xchat.hook_command("timeline", timeline, help="/timline [user_name] [count]")
 
-def follow(word, word_eol, userdata):
-    api.create_friendship(word[0])
 def tweet(word, word_eol, userdata):
     try:
         tweet_msg = word_eol[1]
