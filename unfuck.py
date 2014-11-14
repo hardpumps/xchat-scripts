@@ -9,11 +9,14 @@ xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 
 SAFE_CHANS = []
 
+def error(msg):
+    xchat.prnt("4[!] %s Error: %s" % (__module_name__, msg))
+    
 def unfuck(word, word_eol, userdata):
     try:
         _chan = word[1]
     except IndexError:
-        xchat.prnt("[!] unfuck.py Error: Missing chan argument!")
+        error("Invalid arguments!")
     else:
         if _chan not in SAFE_CHANS:
             network = xchat.get_info('network')
@@ -27,7 +30,7 @@ def add_safe_chan(word, word_eol, userdata):
     try:
         chan = word[1]
     except IndexError:
-        xchat.prnt("[!] unfuck.py Error: Missing argument!")
+        error("Invalid arguments!")
     else:
         SAFE_CHANS.append(chan)
 xchat.hook_command("safechan", add_safe_chan)

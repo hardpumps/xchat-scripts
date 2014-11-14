@@ -10,6 +10,9 @@ xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 my_nick = xchat.get_info('nick')
 running = True
 
+def error(msg):
+    xchat.prnt("4[!] %s Error: %s" % (__module_name__, msg))
+
 def invert(text):
     # 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 becomes
     # 01 00 08 13 10 11 09 12 02 06 04 05 07 03 15 14
@@ -144,32 +147,32 @@ def scroll(word, word_eol, userdata):
     path = '/home/erm/Documents/irc/irc/ascii/'
     if len(word) > 2:
         data = word_eol[2]
-        if data[1:].split()[0] == 'search':
+        if data[1:].split()[0] == 'search': #fix later
             search(path, word[1])
             return
     filepath = '%s%s.txt' % (path, word[1])
     try:
         ascii_txt = open(filepath, 'r').readlines()
-    except IOError as e:
-        xchat.prnt(e)
-        return
-    speed = 50
-    if len(word) > 2:
-        if data.split()[0] == '-speed':
-            speed = int(data.split()[1])*10
-        if data[0] != '-':
-            xchat.prnt(">>Improper argument ('/scroll ascii [-arg1 ...]')")
-            return
-        _args = [arg for arg in data[1:].split(' -') if arg.split()[0] in funcs.keys()]
-        for arg in _args:
-            ascii_txt = transform(ascii_txt, arg)
-    ctx = xchat.get_context()
-    def on_timer(userdata):
-        for line in ascii_txt:
-            if running:
-                ctx.command("say %s" % line.rstrip('\n'))
-                return ascii_txt.pop(0)
-    xchat.hook_timer(speed, on_timer)
+    except IOError:
+        error("File not found!")
+    else:
+        speed = 50
+        if len(word) > 2:
+            if data.split()[0] == '-speed': #fix later
+                speed = int(data.split()[1])*10
+            if data[0] != '-': #fix later
+                error("Invalid arguments!")
+                return
+            _args = [arg for arg in data[1:].split(' -') if arg.split()[0] in funcs.keys()]
+            for arg in _args:
+                ascii_txt = transform(ascii_txt, arg)
+        ctx = xchat.get_context()
+        def on_timer(userdata):
+            for line in ascii_txt:
+                if running:
+                    ctx.command("say %s" % line.rstrip('\n'))
+                    return ascii_txt.pop(0)
+        xchat.hook_timer(speed, on_timer)
     return xchat.EAT_ALL
 xchat.hook_command("scroll", scroll, help="/scroll filename [-arg(s)]")
 

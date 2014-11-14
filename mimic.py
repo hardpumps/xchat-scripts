@@ -11,13 +11,16 @@ xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 TARGET_HOST = None
 TARGET_CHAN = None
 
+def error(msg):
+    xchat.prnt("4[!] %s Error: %s" % (__module_name__, msg))
+
 def mimic(word, word_eol, userdata):
     global TARGET_HOST, TARGET_CHAN
     try:
         target_nick = word[1]
         target_chan = word[2]
     except IndexError:
-        xchat.prnt("[!] mimic.py Error: Missing target arguments!")
+        error("Missing target arguments!")
     else:
         ctx = xchat.find_context(channel=target_chan)
         if ctx:
@@ -27,9 +30,9 @@ def mimic(word, word_eol, userdata):
                 TARGET_HOST = target_host[0]
                 TARGET_CHAN = target_chan
             else:
-                xchat.prnt("[!] mimic.py Error: Missing host for %s" % target_nick) 
+                error("Missing host for %s" % target_nick) 
         else:
-            xchat.prnt("[!] mimic.py Error: Missing context for %s" % target_chan) 
+            error("Missing context for %s" % target_chan) 
         return xchat.EAT_ALL
 xchat.hook_command("mimic", mimic)
 
@@ -37,7 +40,7 @@ def unmimic(word, word_eol, userdata):
     global TARGET_HOST, TARGET_CHAN
     TARGET_HOST = None
     TARGET_CHAN = None
-    xchat.prnt("[!] mimic.py Status: Target information reset!") 
+    xchat.prnt("[!] Target information reset!") 
     return xchat.EAT_ALL
 xchat.hook_command("unmimic", unmimic)
 
@@ -54,7 +57,7 @@ def on_target_message(word, word_eol, userdata):
                     message = word[1]
                     ctx.command("say %s" % message)
         else:
-            xchat.prnt("[!] mimic.py Error: Missing context for %s" % TARGET_CHAN)
+            error("Missing context for %s" % TARGET_CHAN)
     return xchat.EAT_NONE
 
 xchat.hook_print("Channel Message", on_target_message)

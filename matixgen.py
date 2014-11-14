@@ -5,6 +5,9 @@ __module_description__ = "MATIX HAS U"
 import xchat, random, string, time
 xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 
+def error(msg):
+    xchat.prnt("4[!] %s Error: %s" % (__module_name__, msg))
+
 def color(solid=False):
     color_range = range(2, 16)
     if solid:
@@ -21,10 +24,10 @@ def matixgen(word, word_eol, userdata):
         letters = word_eol[2].upper()
         check = [i for i in letters if i not in string.letters]
         if check:
-            xchat.prnt("[!] matxigen.py Error: Only letters allowed!")
+            error("Only letters allowed!")
             return xchat.EAT_ALL
     except:
-        xchat.prnt("[!] matixgen.py Error: Invalid arguments!")
+        error("Invalid arguments!")
     else:
         border_char = 'h'
         text = []

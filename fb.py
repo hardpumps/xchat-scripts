@@ -9,23 +9,33 @@ import xchat, random
 xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 my_nick = xchat.get_info('nick')
 
+def error(msg):
+    xchat.prnt("4[!] %s Error: %s" % (__module_name__, msg))
+    
+def color():
+    color_range = range(2, 16)
+    fg = random.choice(color_range)
+    color_range.remove(fg)
+    bg = random.choice(color_range)
+    return '%s,%s' % (fg, bg)
+
 def fb(word, word_eol, userdata):
     nicklist = [user.nick for user in xchat.get_list('users') 
                 if xchat.nickcmp(user.nick, my_nick) != 0]
     if len(nicklist) < 1:
-        xchat.prnt("[!] fb.py Error: No users in channel!")
+        error("No users in channel!")
     else:
         try:
             mode = word[1]
             if not mode in '1 2 3 4 5':
-                xchat.prnt("[!] fb.py Error: Invalid mode argument!")
+                error("Invalid mode argument!")
         except IndexError:
-            xchat.prnt("[!] fb.py Error: Missing mode argument! (e.g. /fb 1, 2, 3, 4, or 5)")
+            error("Missing mode argument! (e.g. /fb 1, 2, 3, 4, or 5)")
         else:
             if mode in '1 2 3 4':
                 if mode == '1':
                     if len(word) < 4 or not '$n' in word_eol:
-                        xchat.prnt("[!] fb.py Error: Not enough arguments!")
+                        error("Not enough arguments!")
                     else:
                         cmd = word[2]
                         message = word_eol[3]
@@ -33,7 +43,7 @@ def fb(word, word_eol, userdata):
                             xchat.command("%s %s" % (cmd, message.replace('$n', nick)))
                 elif mode in '2 3 4':
                     if len(word) < 3:
-                        xchat.prnt("[!] fb.py Error: Not enough arguments!")
+                        error("Not enough arguments!")
                     else:
                         message = word_eol[2]
                         if mode == '2':
@@ -65,11 +75,3 @@ def fb(word, word_eol, userdata):
                     xchat.command("say %s" % new_msg)
     return xchat.EAT_ALL
 xchat.hook_command("fb", fb, help="/fb [1,2 [$n is replaced with the user nick], 3, 4, 5]")
-
-def color():
-    color_range = range(2, 16)
-    fg = random.choice(color_range)
-    color_range.remove(fg)
-    bg = random.choice(color_range)
-    return '%s,%s' % (fg, bg)
-

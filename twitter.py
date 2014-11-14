@@ -23,6 +23,9 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
+def error(msg):
+    xchat.prnt("4[!] %s Error: %s" % (__module_name__, msg))
+
 def twitter_context():
     ctx = xchat.find_context(channel=TWITTER_TAB)
     if not ctx:
@@ -35,7 +38,7 @@ def timeline(word, word_eol, userdata):
         user = word[1]
         count = int(word[2])
     except IndexError:
-        xchat.prnt("[!] twitter.py Error: Invalid arguments!")
+        error("Invalid arguments!")
     else:
         ctx = twitter_context()
         for t in api.user_timeline(user, count=count):
@@ -53,17 +56,21 @@ def tweet(word, word_eol, userdata):
     try:
         tweet_msg = word_eol[1]
     except IndexError:
-        xchat.prnt("[!] twitter.py Error: Invalid arguments!")
+        error("Invalid arguments!")
     else:
         if (len(tweet_msg) > 140):
-            xchat.prnt("[!] twitter.py Error: Tweet greater than 140 characters!")
+            error("Tweet greater than 140 characters!")
         else:
             if ANNOUNCE_CHAN:
                 tweet_msg = tweet_msg+' via '+str(xchat.get_info('channel')) 
-            api.update_status(tweet_msg)
-            if not QUIET:
-                status = next(tweepy.Cursor(api.user_timeline).items(), None)
-                url = 'https://twitter.com/ermff/status/'+status.id_str
-                xchat.command('say I just tweeted: '+tweet_msg+' '+url)
+            try:
+                api.update_status(tweet_msg)
+            except tweepy.error.TweepError as e:
+                error(str(e[0][0]['message']))
+            else:
+                if not QUIET:
+                    status = next(tweepy.Cursor(api.user_timeline).items(), None)
+                    url = 'https://twitter.com/ermff/status/'+status.id_str
+                    xchat.command('say I just tweeted: '+tweet_msg+' '+url)
     return xchat.EAT_ALL
 xchat.hook_command("tweet", tweet, help="/tweet [msg]")
