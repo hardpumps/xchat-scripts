@@ -16,6 +16,7 @@ ACCESS_SECRET = ''
 
 TWITTER_TAB = '*twitter'
 QUIET = False
+ANNOUNCE_CHAN = True
 USER_NAME = 'ermff'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -57,6 +58,8 @@ def tweet(word, word_eol, userdata):
         if (len(tweet_msg) > 140):
             xchat.prnt("[!] twitter.py Error: Tweet greater than 140 characters!")
         else:
+            if ANNOUNCE_CHAN:
+                tweet_msg = tweet_msg+' via '+str(xchat.get_info('channel')) 
             api.update_status(tweet_msg)
             if not QUIET:
                 status = next(tweepy.Cursor(api.user_timeline).items(), None)
