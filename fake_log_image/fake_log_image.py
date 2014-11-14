@@ -20,7 +20,7 @@ xchat.prnt(">> " + __module_name__ + " " + __module_version__ + " loaded.")
 SRC_FILENAME = 'image.png'
 NEW_FILENAME = 'new.png'
 PATH = os.path.dirname(os.path.abspath(__file__))+'/'
-UPLOAD_TO_IMGUR = True
+UPLOAD_TO_IMGUR = False
 
 
 def fake_log_image_generator(nicklist, network, chan, my_nick, topic):
