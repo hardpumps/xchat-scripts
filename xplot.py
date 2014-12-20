@@ -7,7 +7,7 @@ import xchat
 import random
 
 
-__module_name__ = "textplot.py"
+__module_name__ = "xplot.py"
 __module_version__ = "0.666"
 __module_description__ = "Plot crude ascii graphs"
 
